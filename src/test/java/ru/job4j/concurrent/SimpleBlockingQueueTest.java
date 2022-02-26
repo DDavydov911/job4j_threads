@@ -1,6 +1,8 @@
 package ru.job4j.concurrent;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 
@@ -12,13 +14,21 @@ public class SimpleBlockingQueueTest {
 
         Thread first = new Thread(() -> {
             for (int i = 1; i <= 5; i++) {
-                queue.offer(i);
+                try {
+                    queue.offer(i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }, "Producer");
 
         Thread second = new Thread(() -> {
             for (int i = 0; i < 2; i++) {
-                queue.poll();
+                try {
+                    queue.poll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }, "Consumer");
 
@@ -26,6 +36,10 @@ public class SimpleBlockingQueueTest {
         second.start();
         first.join();
         second.join();
-        assertEquals(List.of(3, 4, 5), queue.getList());
+        List list = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+             list.add(queue.poll());
+        }
+        assertEquals(List.of(3, 4, 5), list);
     }
 }

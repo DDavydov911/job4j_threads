@@ -2,8 +2,8 @@ package ru.job4j.concurrent;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 @ThreadSafe
@@ -17,33 +17,21 @@ public class SimpleBlockingQueue<T> {
         this.limit = limit;
     }
 
-    public synchronized void offer(T value) {
-        while (queue.size() == limit + 1) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public synchronized void offer(T value) throws InterruptedException {
+        while (queue.size() == limit) {
+            this.wait();
         }
         queue.add(value);
         this.notifyAll();
     }
 
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (queue.size() == 0) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            this.wait();
         }
         T item = queue.poll();
         this.notify();
         return item;
-    }
-
-    public synchronized List<T> getList() {
-        return new LinkedList<>(queue);
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -51,20 +39,27 @@ public class SimpleBlockingQueue<T> {
         Thread first = new Thread(() -> {
             for (int i = 1; i <= 5; i++) {
                 System.out.println("Offering " + i);
-                sbq.offer(i);
+                try {
+                    sbq.offer(i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("added " + i);
             }
         });
 
         Thread second = new Thread(() -> {
             for (int i = 1; i <= 2; i++) {
-                System.out.println(sbq.poll());
+                try {
+                    System.out.println(sbq.poll());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         first.start();
         second.start();
         first.join();
         second.join();
-        System.out.println(sbq.getList());
     }
 }
