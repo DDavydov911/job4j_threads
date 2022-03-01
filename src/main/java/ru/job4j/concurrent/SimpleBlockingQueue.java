@@ -34,6 +34,10 @@ public class SimpleBlockingQueue<T> {
         return item;
     }
 
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
     public static void main(String[] args) throws InterruptedException {
         var sbq = new SimpleBlockingQueue(2);
         Thread first = new Thread(() -> {
