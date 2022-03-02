@@ -2,9 +2,7 @@ package ru.job4j.concurrent;
 
 import org.junit.Test;
 
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -25,12 +23,12 @@ public class CASCountTest {
     @Test
     public void when2ThreadIncrement() throws InterruptedException {
         CASCount count = new CASCount();
-        Set<Integer> set = new TreeSet<>();
+        List<Integer> list = new ArrayList<>();
         Thread first = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
                         count.increment();
-                        set.add(count.get());
+                        list.add(count.get());
                     }
                 }
         );
@@ -38,7 +36,7 @@ public class CASCountTest {
                 () -> {
                     for (int i = 0; i < 5; i++) {
                         count.increment();
-                        set.add(count.get());
+                        list.add(count.get());
                     }
                 }
         );
@@ -46,6 +44,6 @@ public class CASCountTest {
         second.start();
         first.join();
         second.join();
-        assertEquals(Set.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), set);
+        assertEquals(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), list);
     }
 }
