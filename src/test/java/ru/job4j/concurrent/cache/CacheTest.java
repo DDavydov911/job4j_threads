@@ -8,7 +8,7 @@ public class CacheTest {
 
     @Test
     public void add() {
-        Cache cache =new Cache();
+        Cache cache = new Cache();
         Base base = new Base(1, 1);
         cache.add(base);
         assertEquals(base, cache.get(1));
@@ -16,7 +16,7 @@ public class CacheTest {
 
     @Test
     public void update() {
-        Cache cache =new Cache();
+        Cache cache = new Cache();
         Base base = new Base(1, 1);
         Base newBase = new Base(1, 1);
         cache.add(base);
@@ -26,7 +26,7 @@ public class CacheTest {
 
     @Test
     public void delete() {
-        Cache cache =new Cache();
+        Cache cache = new Cache();
         Base base = new Base(1, 1);
         cache.add(base);
         cache.delete(base);
