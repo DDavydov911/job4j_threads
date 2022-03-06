@@ -41,8 +41,8 @@ public class CASCountTest {
                 }
         );
         first.start();
-        second.start();
         first.join();
+        second.start();
         second.join();
         assertEquals(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), list);
     }
