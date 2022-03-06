@@ -21,7 +21,8 @@ public class CacheTest {
         Base newBase = new Base(1, 1);
         cache.add(base);
         cache.update(newBase);
-        assertEquals(newBase, cache.get(1));
+        assertEquals(newBase.getName(), cache.get(1).getName());
+        assertEquals(2, cache.get(1).getVersion());
     }
 
     @Test
