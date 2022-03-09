@@ -9,6 +9,10 @@ public class User {
         this.id = id;
     }
 
+    public static String getName() {
+        return "User ...";
+    }
+
     public int getId() {
         return id;
     }
