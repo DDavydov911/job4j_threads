@@ -28,13 +28,17 @@ public class RolColSum {
 
         @Override
         public String toString() {
-            return "rowSum: " + rowSum + "; colSum: " + colSum +";";
+            return "rowSum: " + rowSum + "; colSum: " + colSum + ";";
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             Sums sums = (Sums) o;
             return rowSum == sums.rowSum && colSum == sums.colSum;
         }
