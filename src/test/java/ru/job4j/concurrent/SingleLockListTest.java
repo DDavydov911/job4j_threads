@@ -18,8 +18,8 @@ public class SingleLockListTest {
         Thread first = new Thread(() -> list.add(1));
         Thread second = new Thread(() -> list.add(2));
         first.start();
-        second.start();
         first.join();
+        second.start();
         second.join();
         Set<Integer> rsl = new TreeSet<>();
         list.iterator().forEachRemaining(rsl::add);
@@ -33,8 +33,8 @@ public class SingleLockListTest {
         Thread first = new Thread(() -> rsl.add(list.get(0)));
         Thread second = new Thread(() -> rsl.add(list.get(1)));
         first.start();
-        second.start();
         first.join();
+        second.start();
         second.join();
         assertThat(rsl, is(Set.of(1, 2)));
     }
