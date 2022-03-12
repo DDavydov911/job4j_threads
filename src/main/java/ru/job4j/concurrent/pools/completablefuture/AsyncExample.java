@@ -139,15 +139,15 @@ public class AsyncExample {
 
 
     public static void main(String[] args) throws Exception {
-//        AsyncExample.runAsyncExample();
-//        AsyncExample.supplyAsyncExample();
-//        AsyncExample.thenRunExample();
-//        AsyncExample.thenAcceptExample();
-//        AsyncExample.thenApplyExample();
-//        AsyncExample.thenComposeExample();
-//        AsyncExample.thenCombineExample();
-//        AsyncExample.washHands("Anna");
-//        AsyncExample.allOfExample();
+        AsyncExample.runAsyncExample();
+        AsyncExample.supplyAsyncExample();
+        AsyncExample.thenRunExample();
+        AsyncExample.thenAcceptExample();
+        AsyncExample.thenApplyExample();
+        AsyncExample.thenComposeExample();
+        AsyncExample.thenCombineExample();
+        AsyncExample.washHands("Anna");
+        AsyncExample.allOfExample();
         AsyncExample.anyOfExample();
     }
 
