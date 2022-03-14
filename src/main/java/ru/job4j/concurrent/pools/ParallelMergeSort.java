@@ -40,4 +40,11 @@ public class ParallelMergeSort extends RecursiveTask<int[]> {
         return forkJoinPool.invoke(new ParallelMergeSort(array, 0, array.length - 1));
     }
 
+    public static void main(String[] args) {
+        int[] arr = new int[]{4, 2, 1, 5, 9, 3};
+        int[] res = ParallelMergeSort.sort(arr);
+        for (int re : res) {
+            System.out.println(re);
+        }
+    }
 }

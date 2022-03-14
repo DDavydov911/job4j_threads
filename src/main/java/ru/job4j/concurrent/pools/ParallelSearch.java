@@ -3,46 +3,65 @@ package ru.job4j.concurrent.pools;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-public class ParallelSearch extends RecursiveTask<Integer> {
-    private final int[] array;
-    private final int num;
+public class ParallelSearch<T> extends RecursiveTask<T> {
+    private final T[] array;
+    private T target;
     private final int from;
     private final int to;
+    public int index = -1;
 
-    public ParallelSearch(int[] array, int num, int from, int to) {
+    public ParallelSearch(T[] array, T target, int from, int to) {
         this.array = array;
-        this.num = num;
+        this.target = target;
         this.from = from;
         this.to = to;
     }
 
     @Override
-    protected Integer compute() {
+    protected T compute() {
         if (to + 1 - from <= 10) {
             for (int i = from; i <= to; i++) {
-                if (array[i] == num) {
-                    return i;
+                if (array[i] == target) {
+                    index = i;
+                    return target;
                 }
             }
-            return -1;
+            return null;
         }
         int mid = (from + to) / 2;
-        ParallelSearch leftSearch = new ParallelSearch(array, num, from, mid);
-        ParallelSearch rightSearch = new ParallelSearch(array, num, mid + 1, to);
-        leftSearch.fork();
-        rightSearch.fork();
-        int leftResult = leftSearch.join();
-        int rightResult = rightSearch.join();
-        return (leftResult != -1) ? leftResult : rightResult;
+        ParallelSearch<T> leftParallelSearch = new ParallelSearch<>(array, target, from, mid);
+        ParallelSearch<T> rightParallelSearch = new ParallelSearch<>(array, target, mid + 1, to);
+        leftParallelSearch.fork();
+        rightParallelSearch.fork();
+        T leftResult = leftParallelSearch.join();
+        T rightResult = rightParallelSearch.join();
+        if (leftResult != null) {
+            this.index = leftParallelSearch.index;
+            return leftResult;
+        }
+        if (rightResult != null) {
+            this.index = rightParallelSearch.index;
+            return rightResult;
+        }
+        return null;
     }
 
-    public static int search(int[] array, int number) {
+    public int search() {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return forkJoinPool.invoke(new ParallelSearch(array, number, 0, array.length - 1));
+        forkJoinPool.invoke(this);
+        return this.index;
+    }
+
+    public int search(T target) {
+        this.target = target;
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        forkJoinPool.invoke(this);
+        return this.index;
     }
 
     public static void main(String[] args) {
-        int[] numbers = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-        System.out.println(ParallelSearch.search(numbers, 1));
+        Integer[] numbers = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+        ParallelSearch<Integer> ps = new ParallelSearch<>(numbers, 10, 0, numbers.length - 1);
+        System.out.println(ps.search());
     }
 }
