@@ -58,6 +58,7 @@ public class SimpleBlockingQueue<T> {
                     System.out.println(sbq.poll());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         });
