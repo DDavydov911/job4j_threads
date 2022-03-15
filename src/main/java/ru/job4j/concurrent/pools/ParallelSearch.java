@@ -46,22 +46,15 @@ public class ParallelSearch<T> extends RecursiveTask<T> {
         return null;
     }
 
-    public int search() {
+    public static <T> int search(T[] array, T target) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        forkJoinPool.invoke(this);
-        return this.index;
-    }
-
-    public int search(T target) {
-        this.target = target;
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        forkJoinPool.invoke(this);
-        return this.index;
+        ParallelSearch<T> ps = new ParallelSearch<>(array, target, 0, array.length - 1);
+        forkJoinPool.invoke(ps);
+        return ps.index;
     }
 
     public static void main(String[] args) {
         Integer[] numbers = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-        ParallelSearch<Integer> ps = new ParallelSearch<>(numbers, 10, 0, numbers.length - 1);
-        System.out.println(ps.search());
+        System.out.println(ParallelSearch.search(numbers, 15));
     }
 }
