@@ -29,7 +29,7 @@ public class Wget implements Runnable {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 bytesWritten += bytesRead;
                 System.out.println(bytesWritten);
-                if (bytesWritten >= 1048576) {
+                if (bytesWritten >= speed) {
                     diff = System.currentTimeMillis() - start;
                     System.out.println(diff);
                     if (diff < 1000) {
@@ -40,6 +40,7 @@ public class Wget implements Runnable {
                             Thread.currentThread().interrupt();
                         }
                     }
+                    bytesWritten = 0L;
                     start = System.currentTimeMillis();
                 }
             }
