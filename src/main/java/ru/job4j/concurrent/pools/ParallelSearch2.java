@@ -20,7 +20,7 @@ public class ParallelSearch2<T> extends RecursiveTask<Integer> {
     protected Integer compute() {
         if (to + 1 - from <= 10) {
             for (int i = from; i <= to; i++) {
-                if (array[i] == target) {
+                if (array[i].equals(target)) {
                     return i;
                 }
             }
